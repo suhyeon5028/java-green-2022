@@ -1,4 +1,12 @@
 {
     "java.project.sourcePaths": ["src"],
-    "java.project.outputPath": "bin"
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar"
+        ],
+        "exclude": [
+            "c:\\green_workspace\\downloads\\gson-2.8.5.jar"
+        ]
+    }
 }
