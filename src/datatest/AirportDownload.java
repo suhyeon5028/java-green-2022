@@ -1,8 +1,9 @@
-package data00;
+package datatest;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -10,39 +11,35 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
-import data00.AirportDto.Response.Body.Items.Item;
+import datatest.AirportDto.Response.Body.Items.Item;
 
-public class Test02 {
-    public static void main(String[] args) {
+public class AirportDownload {
+
+    // 공항목록을 조회하여 Map에 담아서 return 하는 메서드
+    public static Map<String, String> getAirportList() {
+        Map<String, String> airportMap = new HashMap<>();
         try {
             URL url = new URL(
                     "http://openapi.tago.go.kr/openapi/service/DmstcFlightNvgInfoService/getArprtList?serviceKey=wJmmW29e3AEUjwLioQR22CpmqS645ep4S8TSlqtSbEsxvnkZFoNe7YG1weEWQHYZ229eNLidnI2Yt5EZ3Stv7g%3D%3D&_type=json");
 
+            // conn -> Byte Stream 선
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
+            // utf-8 한글은 깨지지않게 3Byte로 끊어 읽기
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(conn.getInputStream(), "utf-8"));
 
             String responseJson = br.readLine();
             Gson gson = new Gson();
-            AirportDto dto1 = gson.fromJson(responseJson, AirportDto.class);
-            List<Item> result = dto1.getResponse().getBody().getItems().getItem();
+            AirportDto dto = gson.fromJson(responseJson, AirportDto.class);
+            List<Item> result = dto.getResponse().getBody().getItems().getItem();
 
-            // System.out.println(dto1);
-            // System.out.println(dto1.getResponse().getBody().getItems().getItem().get(0));
-            // System.out.println(result);
-
-            Map<String, String> airportMap = new HashMap<>();
             for (int i = 0; i < result.size(); i++) {
                 airportMap.put(result.get(i).getAirportNm(), result.get(i).getAirportId());
             }
-
-            // System.out.println(airportMap);
-
-            System.out.println(airportMap.get("김해"));
-
         } catch (Exception e) {
-            System.out.println("주소 입력이 잘못되었습니다.");
+            System.out.println("공항목록 조회중 오류가 발생했습니다.");
         }
+        return airportMap;
     }
 }
