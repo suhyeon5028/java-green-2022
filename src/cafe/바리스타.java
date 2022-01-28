@@ -1,11 +1,18 @@
 package cafe;
 
-interface IBarista {
+abstract class Barista {
 }
 
-class Barista implements IBarista {
+class 공유 extends Barista {
+
+    private String name = "공유";
+
     public Coffee makeCoffee(MenuItem menuItem) {
-        Coffee Coffee = new Coffee(menuItem);
-        return Coffee;
+        Coffee coffee = new Coffee(menuItem);
+        return coffee;
+    }
+
+    public String getName() {
+        return name;
     }
 }
